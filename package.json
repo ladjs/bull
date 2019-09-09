@@ -1,0 +1,139 @@
+{
+  "name": "@ladjs/bull",
+  "description": "Bull for Lad",
+  "version": "0.0.0",
+  "author": "Nick Baugh <niftylettuce@gmail.com> (http://niftylettuce.com/)",
+  "ava": {
+    "failFast": true,
+    "verbose": true,
+    "helpers": [
+      "test/helpers/**/*.js"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/ladjs/bull/issues",
+    "email": "niftylettuce@gmail.com"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "contributors": [
+    "Nick Baugh <niftylettuce@gmail.com> (http://niftylettuce.com/)",
+    "Shaun Warman <shaunwarman1@gmail.com> (https://shaunwarman.com)"
+  ],
+  "dependencies": {
+    "@ladjs/redis": "^1.0.3",
+    "@ladjs/shared-config": "^0.0.8",
+    "auto-bind": "^2.1.0",
+    "bull": "^3.10.0",
+    "is-string-and-not-blank": "^0.0.2",
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^8.1.0",
+    "@commitlint/config-conventional": "^8.1.0",
+    "ava": "^2.3.0",
+    "codecov": "^3.5.0",
+    "cross-env": "^5.2.1",
+    "delay": "^4.3.0",
+    "eslint": "6.3.0",
+    "eslint-config-xo-lass": "^1.0.3",
+    "eslint-plugin-node": "^10.0.0",
+    "fixpack": "^2.3.1",
+    "husky": "^3.0.5",
+    "lint-staged": "^9.2.5",
+    "ms": "^2.1.2",
+    "nyc": "^14.1.1",
+    "remark-cli": "^7.0.0",
+    "remark-preset-github": "^0.0.16",
+    "xo": "^0.24.0"
+  },
+  "engines": {
+    "node": ">=8.3"
+  },
+  "homepage": "https://github.com/ladjs/bull",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged && npm test",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "keywords": [
+    "agenda",
+    "bull",
+    "cron",
+    "cronjob",
+    "crontab",
+    "express",
+    "frequency",
+    "frequent",
+    "graceful",
+    "human",
+    "interval",
+    "job",
+    "jobs",
+    "koa",
+    "lad",
+    "lass",
+    "moment",
+    "mongo",
+    "mongodb",
+    "mongoose",
+    "recur",
+    "recurred",
+    "recurring",
+    "redis",
+    "reload",
+    "scheduler",
+    "scheduling",
+    "setup"
+  ],
+  "license": "MIT",
+  "lint-staged": {
+    "*.js": [
+      "xo --fix",
+      "git add"
+    ],
+    "*.md": [
+      "remark . -qfo",
+      "git add"
+    ],
+    "package.json": [
+      "fixpack",
+      "git add"
+    ]
+  },
+  "main": "index.js",
+  "prettier": {
+    "singleQuote": true,
+    "bracketSpacing": true,
+    "trailingComma": "none"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "remarkConfig": {
+    "plugins": [
+      "preset-github"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ladjs/bull"
+  },
+  "scripts": {
+    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
+    "lint": "xo && remark . -qfo",
+    "test": "npm run lint && npm run test-coverage",
+    "test-coverage": "cross-env NODE_ENV=test nyc ava"
+  },
+  "xo": {
+    "prettier": true,
+    "space": true,
+    "extends": [
+      "xo-lass"
+    ]
+  }
+}
