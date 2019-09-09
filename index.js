@@ -187,7 +187,7 @@ class Bull {
   _registerEvents(queue) {
     queue
       .on('error', err => {
-        this.config.logger.error(err, this._getMeta(queue));
+        this.config.logger.error(err, this._getMeta({ queue }));
       })
 
       .on('waiting', jobId => {
