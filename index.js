@@ -134,6 +134,18 @@ class Bull {
       );
     }
 
+    return this.resume(name);
+  }
+
+  async resume(name) {
+    if (!name) {
+      this.config.logger.info('resuming all job queues');
+      return Promise.all([...this.queues.keys()].map(key => this.resume(key)));
+    }
+
+    const queue = this.queues.get(name);
+    if (!queue) throw new Error(`Queue "${name}" does not exist`);
+    this.config.logger.info(`resuming job queue`, this._getMeta({ queue }));
     return queue.resume();
   }
 
