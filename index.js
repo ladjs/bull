@@ -71,7 +71,79 @@ class Bull {
     // value: bull processors
     this.processors = new Map();
 
+    // Queue#process
+    // Queue#add
+    // Queue#pause
+    // Queue#resume
+    // Queue#count
+    // Queue#empty
+    // Queue#clean
+    // Queue#close
+    // Queue#getJob
+    // Queue#getJobs
+    // Queue#getJobLogs
+    // Queue#getRepeatableJobs
+    // Queue#removeRepeatable
+    // Queue#removeRepeatableByKey
+    // Queue#getJobCounts
+    // Queue#getCompletedCount
+    // Queue#getFailedCount
+    // Queue#getDelayedCount
+    // Queue#getActiveCount
+    // Queue#getWaitingCount
+    // Queue#getPausedCount
+    // Queue#getWaiting
+    // Queue#getActive
+    // Queue#getDelayed
+    // Queue#getCompleted
+    // Queue#getFailed
+    [
+      'process',
+      'add',
+      'pause',
+      'resume',
+      'count',
+      'empty',
+      'clean',
+      'close',
+      'getJob',
+      'getJobs',
+      'getJobLogs',
+      'getRepeatableJobs',
+      'removeRepeatable',
+      'removeRepeatableByKey',
+      'getJobCounts',
+      'getCompletedCount',
+      'getFailedCount',
+      'getDelayedCount',
+      'getActiveCount',
+      'getWaitingCount',
+      'getPausedCount',
+      'getWaiting',
+      'getActive',
+      'getDelayed',
+      'getCompleted',
+      'getFailed'
+    ].forEach(method => {
+      this[method] = async (name, ...args) => {
+        if (!isSANB(name))
+          return Promise.all(
+            [...this.queues.keys()].map(key => this[method](key, ...args))
+          );
+
+        const queue = this.queues.get(name);
+        if (!queue) throw new Error(`Queue "${name}" does not exist`);
+        this.config.logger.debug(method, this._getMeta({ queue, args }));
+        return queue[method](...args);
+      };
+    });
+
+    // alias stop <-> close
+    this.stop = this.close;
+
+    // bind `this` to all methods
     autoBind(this);
+
     // create queues based off options passed
     for (let i = 0; i < this.config.queues.length; i++) {
       const queue = this.config.queues[i];
@@ -83,7 +155,7 @@ class Bull {
         );
       for (let p = 0; p < queue.processors.length; p++) {
         if (
-          !_.isObject(queue.processors[i]) ||
+          !_.isObject(queue.processors[p]) ||
           Array.isArray(queue.processors[p])
         )
           throw new Error(
@@ -113,14 +185,14 @@ class Bull {
   }
 
   async start(name) {
-    if (!name) {
-      this.config.logger.info('starting up all job queues');
+    if (!isSANB(name)) {
+      this.config.logger.debug('starting up all job queues');
       return Promise.all([...this.queues.keys()].map(key => this.start(key)));
     }
 
     const queue = this.queues.get(name);
     if (!queue) throw new Error(`Queue "${name}" does not exist`);
-    this.config.logger.info(`starting up job queue`, this._getMeta({ queue }));
+    this.config.logger.debug('starting up job queue', this._getMeta({ queue }));
 
     const processors = this.processors.get(name);
     if (!processors)
@@ -135,46 +207,6 @@ class Bull {
     }
 
     return this.resume(name);
-  }
-
-  async resume(name) {
-    if (!name) {
-      this.config.logger.info('resuming all job queues');
-      return Promise.all([...this.queues.keys()].map(key => this.resume(key)));
-    }
-
-    const queue = this.queues.get(name);
-    if (!queue) throw new Error(`Queue "${name}" does not exist`);
-    this.config.logger.info(`resuming job queue`, this._getMeta({ queue }));
-    return queue.resume();
-  }
-
-  async pause(name) {
-    if (!name) {
-      this.config.logger.info('pausing all job queues');
-      return Promise.all([...this.queues.keys()].map(key => this.pause(key)));
-    }
-
-    const queue = this.queues.get(name);
-    if (!queue) throw new Error(`Queue "${name}" does not exist`);
-    this.config.logger.info(`pausing job queue`, this._getMeta({ queue }));
-    return queue.pause();
-  }
-
-  // graceful shutdown
-  async stop(name) {
-    if (!name) {
-      this.config.logger.info('shutting down all job queues');
-      return Promise.all([...this.queues.keys()].map(key => this.stop(key)));
-    }
-
-    const queue = this.queues.get(name);
-    if (!queue) throw new Error(`Queue "${name}" does not exist`);
-    this.config.logger.info(
-      `shutting down job queue`,
-      this._getMeta({ queue })
-    );
-    return queue.close();
   }
 
   // get meta information about the queue for logging purposes

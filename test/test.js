@@ -53,7 +53,7 @@ test('job with file path processor', async t => {
   const waitingCount = await queue.getWaitingCount();
   t.is(waitingCount, 0);
   await t.notThrowsAsync(bull.pause());
-  await t.notThrowsAsync(bull.stop());
+  await t.notThrowsAsync(bull.close());
 });
 
 test('job with callback processor', async t => {
@@ -82,22 +82,19 @@ test('job with callback processor', async t => {
   const queue = bull.queues.get('messenger');
   await t.notThrowsAsync(queue.empty());
   await t.notThrowsAsync(
-    queue.add(
-      {},
-      {
-        jobId: 'messenger',
-        repeat: {
-          every: ms('1m')
-        }
+    queue.add({
+      jobId: 'messenger',
+      repeat: {
+        every: ms('1m')
       }
-    )
+    })
   );
   await t.notThrowsAsync(bull.start());
   await delay(1000);
   const waitingCount = await queue.getWaitingCount();
   t.is(waitingCount, 0);
   await t.notThrowsAsync(bull.pause());
-  await t.notThrowsAsync(bull.stop());
+  await t.notThrowsAsync(bull.close());
 });
 
 test('job with async processor', async t => {
@@ -156,5 +153,5 @@ test('job with async processor', async t => {
   const waitingCount = await queue.getWaitingCount();
   t.is(waitingCount, 0);
   await t.notThrowsAsync(bull.pause());
-  await t.notThrowsAsync(bull.stop());
+  await t.notThrowsAsync(bull.close());
 });
