@@ -133,7 +133,7 @@ class Bull {
 
         const queue = this.queues.get(name);
         if (!queue) throw new Error(`Queue "${name}" does not exist`);
-        this.config.logger.debug(method, this._getMeta({ queue, args }));
+        this.config.logger.debug(method, this.getMeta({ queue, args }));
         return queue[method](...args);
       };
     });
@@ -192,7 +192,7 @@ class Bull {
 
     const queue = this.queues.get(name);
     if (!queue) throw new Error(`Queue "${name}" does not exist`);
-    this.config.logger.debug('starting up job queue', this._getMeta({ queue }));
+    this.config.logger.debug('starting up job queue', this.getMeta({ queue }));
 
     const processors = this.processors.get(name);
     if (!processors)
@@ -210,8 +210,8 @@ class Bull {
   }
 
   // get meta information about the queue for logging purposes
-  _getMeta(opts) {
-    if (!opts.queue) throw new Error('_getMeta must be passed opts.queue');
+  getMeta(opts) {
+    if (!opts.queue) throw new Error('getMeta must be passed opts.queue');
     return {
       ...opts,
       queue: _.pick(opts.queue, [
@@ -231,37 +231,34 @@ class Bull {
   _registerEvents(queue) {
     queue
       .on('error', err => {
-        this.config.logger.error(err, this._getMeta({ queue }));
+        this.config.logger.error(err, this.getMeta({ queue }));
       })
 
       .on('waiting', jobId => {
         // A Job is waiting to be processed as soon as a worker is idling.
         this.config.logger.debug(
           'queue waiting',
-          this._getMeta({ queue, job: { id: jobId } })
+          this.getMeta({ queue, job: { id: jobId } })
         );
       })
 
       // .on('active', (job, jobPromise) => {
       .on('active', job => {
         // A job has started. You can use `jobPromise.cancel()`` to abort it.
-        this.config.logger.debug('queue active', this._getMeta({ queue, job }));
+        this.config.logger.debug('queue active', this.getMeta({ queue, job }));
       })
 
       .on('stalled', job => {
         // A job has been marked as stalled. This is useful for debugging job
         // workers that crash or pause the event loop.
-        this.config.logger.debug(
-          'queue stalled',
-          this._getMeta({ queue, job })
-        );
+        this.config.logger.debug('queue stalled', this.getMeta({ queue, job }));
       })
 
       .on('progress', (job, progress) => {
         // A job's progress was updated!
         this.config.logger.debug(
           'queue progress',
-          this._getMeta({ queue, job, progress })
+          this.getMeta({ queue, job, progress })
         );
       })
 
@@ -269,26 +266,23 @@ class Bull {
         // A job successfully completed with a `result`.
         this.config.logger.debug(
           'queue completed',
-          this._getMeta({ queue, job, result })
+          this.getMeta({ queue, job, result })
         );
       })
 
       .on('failed', (job, err) => {
         // A job failed with reason `err`!
-        this.config.logger.error(err, this._getMeta({ queue, job }));
+        this.config.logger.error(err, this.getMeta({ queue, job }));
       })
 
       .on('paused', () => {
         // The queue has been paused.
-        this.config.logger.debug('queue paused', this._getMeta({ queue }));
+        this.config.logger.debug('queue paused', this.getMeta({ queue }));
       })
 
       .on('resumed', job => {
         // The queue has been resumed.
-        this.config.logger.debug(
-          'queue resumed',
-          this._getMeta({ queue, job })
-        );
+        this.config.logger.debug('queue resumed', this.getMeta({ queue, job }));
       })
 
       .on('cleaned', (jobs, type) => {
@@ -296,21 +290,18 @@ class Bull {
         // jobs, and `type` is the type of jobs cleaned.
         this.config.logger.debug(
           'queue cleaned',
-          this._getMeta({ queue, jobs, type })
+          this.getMeta({ queue, jobs, type })
         );
       })
 
       .on('drained', () => {
         // Emitted every time the queue has processed all the waiting jobs (even if there can be some delayed jobs not yet processed)
-        this.config.logger.debug('queue drained', this._getMeta({ queue }));
+        this.config.logger.debug('queue drained', this.getMeta({ queue }));
       })
 
       .on('removed', job => {
         // A job successfully removed.
-        this.config.logger.debug(
-          'queue removed',
-          this._getMeta({ queue, job })
-        );
+        this.config.logger.debug('queue removed', this.getMeta({ queue, job }));
       });
   }
 }
