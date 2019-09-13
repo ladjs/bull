@@ -211,6 +211,7 @@ class Bull {
 
   // get meta information about the queue for logging purposes
   getMeta(opts) {
+    if (!opts.queue && opts.job && opts.job.queue) opts.queue = opts.job.queue;
     if (!opts.queue) throw new Error('getMeta must be passed opts.queue');
     return {
       ...opts,
