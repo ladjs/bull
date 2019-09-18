@@ -16,7 +16,11 @@ class Bull {
         processors: {},
         concurrency: 1,
         queues: [],
-        queue: {}
+        queue: {
+          prefix: `bull_${(
+            process.env.NODE_ENV || 'development'
+          ).toLowerCase()}`
+        }
       },
       config
     );
