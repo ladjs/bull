@@ -202,11 +202,11 @@ class Bull {
     if (!processors)
       throw new Error(`Queue "${name}" did not have any processors`);
 
-    for (let p = 0; p < processors.length; p++) {
+    for (const element of processors) {
       queue.process(
-        processors[p].name || '*',
-        processors[p].concurrency || this.config.concurrency,
-        processors[p].processor
+        element.name || '*',
+        element.concurrency || this.config.concurrency,
+        element.processor
       );
     }
 
