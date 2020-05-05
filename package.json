@@ -6,8 +6,9 @@
   "ava": {
     "failFast": true,
     "verbose": true,
-    "helpers": [
-      "test/helpers/**/*.js"
+    "files": [
+      "test/**/*",
+      "!test/helpers"
     ]
   },
   "bugs": {
@@ -25,30 +26,30 @@
   ],
   "dependencies": {
     "@ladjs/redis": "^1.0.3",
-    "@ladjs/shared-config": "^1.0.0",
-    "auto-bind": "^3.0.0",
-    "bull": "^3.12.1",
+    "@ladjs/shared-config": "^2.0.0",
+    "auto-bind": "^4.0.0",
+    "bull": "^3.13.0",
     "is-string-and-not-blank": "^0.0.2",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
-    "@commitlint/cli": "^8.2.0",
-    "@commitlint/config-conventional": "^8.2.0",
-    "ava": "^2.4.0",
-    "codecov": "^3.6.1",
-    "cross-env": "^6.0.3",
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
+    "ava": "^3.8.1",
+    "codecov": "^3.6.5",
+    "cross-env": "^7.0.2",
     "delay": "^4.3.0",
-    "eslint": "6.7.2",
+    "eslint": "6.8.0",
     "eslint-config-xo-lass": "^1.0.3",
-    "eslint-plugin-node": "^10.0.0",
-    "fixpack": "^2.3.1",
-    "husky": "^3.1.0",
-    "lint-staged": "^9.5.0",
+    "eslint-plugin-node": "^11.1.0",
+    "fixpack": "^3.0.6",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.2",
     "ms": "^2.1.2",
-    "nyc": "^14.1.1",
-    "remark-cli": "^7.0.1",
-    "remark-preset-github": "^0.0.16",
-    "xo": "^0.25.3"
+    "nyc": "^15.0.1",
+    "remark-cli": "^8.0.0",
+    "remark-preset-github": "^1.0.0",
+    "xo": "0.25"
   },
   "engines": {
     "node": ">=8.3"

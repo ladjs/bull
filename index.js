@@ -234,6 +234,33 @@ class Bull {
 
   // <https://github.com/OptimalBits/bull/blob/develop/REFERENCE.md#events>
   _registerEvents(queue) {
+    // <https://github.com/OptimalBits/bull/blob/ce5c91dcef9e8d064406946987e8ed31babbfe39/lib/queue.js#L456-L476
+    /*
+    if (!this.registeredEvents[_eventName]) {
+      return utils
+        .isRedisReady(this.eclient)
+        .then(() => {
+          const channel = this.toKey(_eventName);
+          if (['active', 'waiting', 'stalled'].indexOf(_eventName) !== -1) {
+            return (this.registeredEvents[_eventName] = this.eclient.psubscribe(
+              channel + '*'
+            ));
+          } else {
+            return (this.registeredEvents[_eventName] = this.eclient.subscribe(
+              channel
+            ));
+          }
+        })
+        .then(() => {
+          this.emit('registered:' + eventName);
+        });
+    } else {
+      return this.registeredEvents[_eventName];
+    }
+    */
+
+    // <https://github.com/OptimalBits/bull/issues/1659>
+    queue.removeAllListeners('error');
     queue
       .on('error', err => {
         this.config.logger.error(err, this.getMeta({ queue }));
