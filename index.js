@@ -20,7 +20,8 @@ class Bull {
           prefix: `bull_${(
             process.env.NODE_ENV || 'development'
           ).toLowerCase()}`
-        }
+        },
+        queueMaxListeners: 15
       },
       config
     );
@@ -261,6 +262,8 @@ class Bull {
 
     // <https://github.com/OptimalBits/bull/issues/1659>
     queue.removeAllListeners('error');
+    queue.setMaxListeners(this.config.queueMaxListeners);
+
     queue
       .on('error', err => {
         this.config.logger.error(err, this.getMeta({ queue }));
