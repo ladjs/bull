@@ -51,19 +51,25 @@ class Bull {
     this.client = new Redis(
       this.config.queue.redis,
       this.config.logger,
-      this.config.redisMonitor
+      this.config.redisMonitor,
+      this.config.queueMaxListeners,
+      false
     );
 
     this.eclient = new Redis(
       this.config.queue.redis,
       this.config.logger,
-      this.config.redisMonitor
+      this.config.redisMonitor,
+      this.config.queueMaxListeners,
+      false
     );
 
     this.bclient = new Redis(
       this.config.queue.redis,
       this.config.logger,
-      this.config.redisMonitor
+      this.config.redisMonitor,
+      this.config.queueMaxListeners,
+      false
     );
 
     // Map<key, Queue>
@@ -262,7 +268,6 @@ class Bull {
 
     // <https://github.com/OptimalBits/bull/issues/1659>
     queue.removeAllListeners('error');
-    queue.setMaxListeners(this.config.queueMaxListeners);
 
     queue
       .on('error', err => {
