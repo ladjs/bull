@@ -1,5 +1,7 @@
 # [**@ladjs/bull**](https://github.com/ladjs/bull)
 
+**Please switch to Bree instead, as Bull has core bugs and leaks, see https://jobscheduler.net for more information.**
+
 [![build status](https://img.shields.io/travis/ladjs/bull.svg)](https://travis-ci.org/ladjs/bull)
 [![code coverage](https://img.shields.io/codecov/c/github/ladjs/bull.svg)](https://codecov.io/gh/ladjs/bull)
 [![code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
